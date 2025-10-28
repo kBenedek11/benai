@@ -1,5 +1,7 @@
 import os
 from functions.config import *
+from google import genai
+from google.genai import types
 
 def get_file_content(working_directory, file_path):
     full_path = os.path.abspath(os.path.join(working_directory, file_path))
@@ -19,3 +21,18 @@ def get_file_content(working_directory, file_path):
         return file_content_string
     except Exception as e:
         return f"Error: {e}"
+    
+
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Lists the content of a file, constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The path of the file which contents will be listed, constrained to files inside the working directory.",
+            ),
+        },
+    ),
+)
